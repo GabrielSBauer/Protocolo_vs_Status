@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapeamento de História do Usuário</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-light: #e2e8f0;
+            --line-color: #cbd5e1;
+            
+            /* Cores de status */
+            --status-red: #ef4444;
+            --status-green: #10b981;
+            --status-orange: #f59e0b;
+            --status-blue: #3b82f6;
+            --status-pink: #ec4899;
+            --status-grey: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Centraliza verticalmente se couber na tela */
+            padding: 15px;
+        }
+
+        /* Container mais compacto */
+        .container {
+            max-width: 1400px; /* Reduzido para acompanhar a proporção */
+            width: 100%;
+            height: auto;
+            background: var(--bg-card);
+            padding: 15px 20px; /* Paddings reduzidos */
+            border-radius: 16px;
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+            display: grid;
+            grid-template-columns: 1fr 2px 1fr;
+            gap: 20px; /* Gap reduzido */
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .column-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-grow: 1;
+            gap: 8px; /* Reduzido de 15px para 8px para economizar altura */
+        }
+
+        .vert-divider {
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, var(--border-light), transparent);
+        }
+
+        /* Cabeçalhos compactos */
+        .column-header {
+            text-align: center;
+            margin-bottom: 10px; /* Reduzido */
+        }
+
+        .section-title {
+            background-color: #f1f5f9;
+            color: #475569;
+            padding: 4px 12px; /* Reduzido */
+            border-radius: 20px;
+            font-size: 10px; /* Reduzido de 12px */
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 10px; /* Reduzido */
+        }
+
+        .grid-header {
+            display: grid;
+            grid-template-columns: 1fr 30px 1fr; /* Conector mais estreito (30px) */
+            gap: 10px; /* Reduzido */
+            margin-bottom: 5px; /* Reduzido */
+            text-align: center;
+        }
+
+        .header-badge {
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding: 6px 10px; /* Reduzido */
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 10px; /* Reduzido de 12px */
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Layout das Linhas (Flow) */
+        .flow-row {
+            display: grid;
+            grid-template-columns: 1fr 30px 1fr; /* Conector mais estreito */
+            gap: 10px; /* Reduzido */
+            align-items: center;
+        }
+
+        /* Cartões (Boxes) compactos */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-left: 4px solid var(--status-grey);
+            border-radius: 6px; /* Borda levemente menor */
+            padding: 8px 10px; /* Padding reduzido drasticamente */
+            font-size: 11px; /* Fonte reduzida de 13px para 11px */
+            font-weight: 500;
+            color: var(--text-main);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+            position: relative;
+            line-height: 1.2; /* Linhas mais juntas */
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+            border-color: #cbd5e1;
+        }
+
+        .card-center {
+            text-align: center;
+            border-left: 1px solid var(--border-light);
+            border-bottom: 4px solid var(--status-grey);
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Cores das Bordas dos Cartões */
+        .border-red { border-left-color: var(--status-red); }
+        .border-green { border-left-color: var(--status-green); }
+        .border-orange { border-left-color: var(--status-orange); }
+        .border-blue { border-left-color: var(--status-blue); }
+        .border-pink { border-left-color: var(--status-pink); }
+        
+        .card-center.border-red { border-bottom-color: var(--status-red); border-left-color: var(--border-light); }
+        .card-center.border-green { border-bottom-color: var(--status-green); border-left-color: var(--border-light); }
+        .card-center.border-orange { border-bottom-color: var(--status-orange); border-left-color: var(--border-light); }
+
+        /* Agrupamentos mais justos */
+        .group-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px; /* Reduzido */
+        }
+
+        .col-span-2 {
+            grid-column: span 2;
+        }
+
+        .group-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 6px; /* Reduzido */
+        }
+
+        .group-box {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            padding: 10px; /* Reduzido */
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px; /* Reduzido */
+            height: 100%;
+            justify-content: center;
+        }
+
+        /* Conectores Visuais */
+        .connector {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .conn-line::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: var(--line-color);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .conn-fork::before {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background-color: var(--line-color);
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .conn-fork::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: calc(100% + 6px); /* Ajustado para bater com o novo gap */
+            border: 2px solid var(--line-color);
+            border-right: none;
+            border-radius: 4px 0 0 4px;
+            left: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* =========================================
+           MEDIA QUERIES (RESPONSIVIDADE)
+           ========================================= */
+
+        /* Tablets e Telas Menores */
+        @media (max-width: 1024px) {
+            body {
+                align-items: flex-start; /* Evita cortar o topo no mobile */
+            }
+            .container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .vert-divider {
+                width: 100%;
+                height: 2px;
+                background: linear-gradient(90deg, transparent, var(--border-light), transparent);
+            }
+        }
+
+        /* Celulares */
+        @media (max-width: 768px) {
+            .group-grid {
+                grid-template-columns: 1fr; 
+            }
+            .col-span-2 {
+                grid-column: span 1; 
+            }
+            .grid-header, .flow-row {
+                grid-template-columns: 1fr 20px 1fr; 
+                gap: 8px;
+            }
+            .card {
+                font-size: 10px;
+                padding: 8px 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div class="column">
+        <div class="column-header">
+            <div class="section-title">Restrições Ambientais</div>
+            <div class="grid-header">
+                <div class="header-badge">Protocolo / Causa</div>
+                <div></div>
+                <div class="header-badge">Conclusão / Status</div>
+            </div>
+        </div>
+        
+        <div class="column-content">
+            <div class="flow-row" style="align-items: stretch; flex-grow: 1;">
+                <div class="group-grid">
+                    <div class="card border-red">IAT - PR (Inst. Água e Terra)</div>
+                    <div class="card border-red">IBAMA</div>
+                    <div class="card border-red">ICMBio</div>
+                    <div class="card border-red">LDI - Pará</div>
+                    <div class="card border-red">LUC - Land Use Change</div>
+                    <div class="card border-red">PRODES 2020</div>
+                    <div class="card border-red">Protocolo Verde de Grãos-PA</div>
+                    <div class="card border-red">SEMAD-GO</div>
+                    <div class="card border-red">SEMA-MT</div>
+                    <div class="card border-red">Status CAR: Suspenso ou Cancelado</div>
+                    <div class="card border-red">Terra Indígena / Quilombola</div>
+                    <div class="card border-red">Trabalho Escravo</div>
+                    <div class="card border-red col-span-2">Unidade de Conservação</div>
+                </div>
+
+                <div class="connector conn-line"></div>
+
+                <div class="group-box">
+                    <div class="card card-center border-green">Desbloqueado</div>
+                    <div class="card card-center border-red">Bloqueio Mantido</div>
+                    <div class="card card-center border-orange">Desbloqueado - Bloquear Novamente</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="vert-divider"></div>
+
+    <div class="column">
+        <div class="column-header">
+            <div class="section-title">Outras Situações</div>
+            <div class="grid-header">
+                <div class="header-badge">Protocolo / Causa</div>
+                <div></div>
+                <div class="header-badge">Conclusão / Status</div>
+            </div>
+        </div>
+
+        <div class="column-content">
+            <div class="flow-row">
+                <div class="card">Aguardando processamento Serasa</div>
+                <div class="connector conn-line"></div>
+                <div class="card">Em andamento</div>
+            </div>
+
+            <div class="flow-row">
+                <div class="card border-blue">Alçada Y</div>
+                <div class="connector conn-fork"></div>
+                <div class="group-stack">
+                    <div class="card">Direcionado à Alçada G - Em Conformidade</div>
+                    <div class="card">Direcionado à Alçada L - Não Conforme</div>
+                </div>
+            </div>
+
+            <div class="flow-row">
+                <div class="card border-pink">Análise de Crédito - Prospecção de Clientes</div>
+                <div class="connector conn-fork"></div>
+                <div class="group-stack">
+                    <div class="card">Apenas análise - Recomendamos a negociação</div>
+                    <div class="card">Apenas análise - Não recomendamos a negociação</div>
+                </div>
+            </div>
+
+            <div class="flow-row">
+                <div class="card">Cadastro CAR - CORP_F0285</div>
+                <div class="connector conn-line"></div>
+                <div class="card">Cadastro do CAR/SIGEF realizado no sistema</div>
+            </div>
+
+            <div class="flow-row">
+                <div class="card">Enquadramento do Fornecedor (Direto/Indireto/N/A)</div>
+                <div class="connector conn-fork"></div>
+                <div class="group-stack">
+                    <div class="card">Direcionado ao MDM</div>
+                    <div class="card">Enquadramento mantido - Não cumpre os requisitos</div>
+                </div>
+            </div>
+
+            <div class="flow-row">
+                <div class="card border-red">Sem CAR</div>
+                <div class="connector conn-line"></div>
+                <div class="card">Direcionado ao MDM</div>
+            </div>
+
+            <div class="flow-row">
+                <div class="card border-blue">Bloqueado Manualmente - Sem motivo expresso</div>
+                <div class="connector conn-fork"></div>
+                <div class="group-stack">
+                    <div class="card">Desbloqueado</div>
+                    <div class="card">Bloqueio Mantido</div>
+                </div>
+            </div>
+
+            <div class="flow-row">
+                <div class="card border-green">Não há restrições e/ou bloqueios</div>
+                <div class="connector conn-line"></div>
+                <div class="card">Encerrado</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
