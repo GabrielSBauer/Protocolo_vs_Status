@@ -38,22 +38,22 @@
             overflow-x: hidden;
             display: flex;
             justify-content: center;
-            align-items: center; /* Centraliza verticalmente se couber na tela */
+            align-items: center; 
             padding: 15px;
         }
 
         /* Container mais compacto */
         .container {
-            max-width: 1400px; /* Reduzido para acompanhar a proporção */
+            max-width: 1400px; 
             width: 100%;
             height: auto;
             background: var(--bg-card);
-            padding: 15px 20px; /* Paddings reduzidos */
+            padding: 15px 20px; 
             border-radius: 16px;
             box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
             display: grid;
             grid-template-columns: 1fr 2px 1fr;
-            gap: 20px; /* Gap reduzido */
+            gap: 20px; 
         }
 
         .column {
@@ -67,7 +67,7 @@
             flex-direction: column;
             justify-content: space-between;
             flex-grow: 1;
-            gap: 8px; /* Reduzido de 15px para 8px para economizar altura */
+            gap: 8px; 
         }
 
         .vert-divider {
@@ -79,37 +79,37 @@
         /* Cabeçalhos compactos */
         .column-header {
             text-align: center;
-            margin-bottom: 10px; /* Reduzido */
+            margin-bottom: 10px; 
         }
 
         .section-title {
             background-color: #f1f5f9;
             color: #475569;
-            padding: 4px 12px; /* Reduzido */
+            padding: 4px 12px; 
             border-radius: 20px;
-            font-size: 10px; /* Reduzido de 12px */
+            font-size: 10px; 
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
             display: inline-block;
-            margin-bottom: 10px; /* Reduzido */
+            margin-bottom: 10px; 
         }
 
         .grid-header {
             display: grid;
-            grid-template-columns: 1fr 30px 1fr; /* Conector mais estreito (30px) */
-            gap: 10px; /* Reduzido */
-            margin-bottom: 5px; /* Reduzido */
+            grid-template-columns: 1fr 30px 1fr; 
+            gap: 10px; 
+            margin-bottom: 5px; 
             text-align: center;
         }
 
         .header-badge {
             background-color: #0f172a;
             color: #f8fafc;
-            padding: 6px 10px; /* Reduzido */
+            padding: 6px 10px; 
             border-radius: 6px;
             font-weight: 600;
-            font-size: 10px; /* Reduzido de 12px */
+            font-size: 10px; 
             letter-spacing: 0.5px;
             text-transform: uppercase;
         }
@@ -117,25 +117,26 @@
         /* Layout das Linhas (Flow) */
         .flow-row {
             display: grid;
-            grid-template-columns: 1fr 30px 1fr; /* Conector mais estreito */
-            gap: 10px; /* Reduzido */
+            grid-template-columns: 1fr 30px 1fr; 
+            gap: 10px; 
             align-items: center;
         }
 
-        /* Cartões (Boxes) compactos */
+        /* Cartões (Boxes) */
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border-light);
             border-left: 4px solid var(--status-grey);
-            border-radius: 6px; /* Borda levemente menor */
-            padding: 8px 10px; /* Padding reduzido drasticamente */
-            font-size: 11px; /* Fonte reduzida de 13px para 11px */
+            border-radius: 6px; 
+            padding: 8px 10px; 
+            font-size: 11px; 
             font-weight: 500;
             color: var(--text-main);
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
             transition: all 0.2s ease;
             position: relative;
-            line-height: 1.2; /* Linhas mais juntas */
+            z-index: 2; /* Garante que o cartão fique sobre a linha conectora */
+            line-height: 1.2; 
         }
 
         .card:hover {
@@ -169,7 +170,7 @@
         .group-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 6px; /* Reduzido */
+            gap: 6px; 
         }
 
         .col-span-2 {
@@ -179,22 +180,24 @@
         .group-stack {
             display: flex;
             flex-direction: column;
-            gap: 6px; /* Reduzido */
+            gap: 6px; 
         }
 
         .group-box {
             background: #f8fafc;
             border: 1px dashed #cbd5e1;
-            padding: 10px; /* Reduzido */
+            padding: 10px; 
             border-radius: 8px;
             display: flex;
             flex-direction: column;
-            gap: 8px; /* Reduzido */
+            gap: 8px; 
             height: 100%;
             justify-content: center;
+            position: relative;
+            z-index: 2; /* Garante que a caixa de grupo cubra as linhas */
         }
 
-        /* Conectores Visuais */
+        /* Conectores Visuais (Atravessando o gap) */
         .connector {
             position: relative;
             width: 100%;
@@ -202,25 +205,29 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 1; /* Mantém as linhas atrás dos cartões */
         }
 
         .conn-line::before {
             content: '';
             position: absolute;
-            width: 100%;
+            /* Atravessa os gaps de 10px da esquerda e direita */
+            width: calc(100% + 24px); 
             height: 2px;
             background-color: var(--line-color);
             top: 50%;
+            left: -12px; 
             transform: translateY(-50%);
         }
 
         .conn-fork::before {
             content: '';
             position: absolute;
-            width: 50%;
+            /* Atravessa o gap da esquerda e se conecta no centro */
+            width: calc(50% + 12px); 
             height: 2px;
             background-color: var(--line-color);
-            left: 0;
+            left: -12px;
             top: 50%;
             transform: translateY(-50%);
         }
@@ -228,24 +235,26 @@
         .conn-fork::after {
             content: '';
             position: absolute;
-            width: 50%;
-            height: calc(100% + 6px); /* Ajustado para bater com o novo gap */
+            /* Inicia no centro e atravessa o gap da direita */
+            width: calc(50% + 12px); 
+            /* Cálculo exato para bater no centro dos dois cartões da direita */
+            height: calc(100% - 32px); 
             border: 2px solid var(--line-color);
             border-right: none;
-            border-radius: 4px 0 0 4px;
+            border-radius: 6px 0 0 6px;
             left: 50%;
             top: 50%;
             transform: translateY(-50%);
+            box-sizing: border-box;
         }
 
         /* =========================================
            MEDIA QUERIES (RESPONSIVIDADE)
            ========================================= */
 
-        /* Tablets e Telas Menores */
         @media (max-width: 1024px) {
             body {
-                align-items: flex-start; /* Evita cortar o topo no mobile */
+                align-items: flex-start;
             }
             .container {
                 grid-template-columns: 1fr;
@@ -258,7 +267,6 @@
             }
         }
 
-        /* Celulares */
         @media (max-width: 768px) {
             .group-grid {
                 grid-template-columns: 1fr; 
@@ -332,7 +340,7 @@
             </div>
         </div>
 
-    
+        <div class="column-content">
 
             <div class="flow-row">
                 <div class="card border-blue">Alçada Y</div>
@@ -343,7 +351,6 @@
                 </div>
             </div>
         
-           
             <div class="flow-row">
                 <div class="card">Aguardando processamento Serasa</div>
                 <div class="connector conn-line"></div>
@@ -401,6 +408,3 @@
 
 </body>
 </html>
-
-
-
